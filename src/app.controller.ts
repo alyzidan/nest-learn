@@ -5,11 +5,11 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get(':id')
-  getAdminName(@Param('id', ParseIntPipe) id: number): number {
-    console.log(id);
-    return id;
-  }
+  //   @Get(':id')
+  //   getAdminName(@Param('id', ParseIntPipe) id: number): number {
+  //     console.log(id);
+  //     return id;
+  //   }
 
   @Get()
   getHello(): string {
