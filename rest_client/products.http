@@ -2,22 +2,24 @@
 GET http://localhost:3000/products
 
 ### GET PRODUCT BY ID
-GET http://localhost:3000/products/2
+GET http://localhost:3000/products/3
 
-### CREATE PRODUCT BY ID
+### CREATE PRODUCT
 POST http://localhost:3000/products/create
 Content-Type: application/json
 
 {
-    "name": "hi i am new product",
+    "title": "lab lab",
     "description": "some description",
     "price": 2
 }
 
 ### Update PRODUCT BY ID
-Put http://localhost:3000/products/1
+Put http://localhost:3000/products/3
 Content-Type: application/json
 
 {
-    "name": "MODIFIED"
+    "title": "MODIFIED",
+    "description": "MODIFIED",
+    "price":22
 }

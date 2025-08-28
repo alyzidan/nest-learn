@@ -8,16 +8,7 @@ export class UsersService {
     private readonly products: ProductsService,
   ) {}
   getAllUsers() {
-    return [
-      {
-        id: 1,
-        name: 'John Doe',
-      },
-      {
-        id: 2,
-        name: 'mini Doe',
-      },
-      ...this.products.getAllproducts(),
-    ];
+    // return this.products.getAllproducts();
+    return [];
   }
 }

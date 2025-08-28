@@ -1,6 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { createProductDto } from './dtos/create-products.dto';
 import { updateProductDto } from './dtos/update-products.dto';
+import { Product } from './entities/product.entitiy';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 type ProductType = {
   id: number;
   name: string;
@@ -9,6 +12,10 @@ type ProductType = {
 };
 @Injectable()
 export class ProductsService {
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+  ) {}
   private products: ProductType[] = [
     {
       id: 1,
@@ -27,47 +34,46 @@ export class ProductsService {
    *
    * @param param0 createProduct
    */
-  createProduct({ name, description, price }: createProductDto) {
-    const newProduct: ProductType = {
-      id: this.products.length + 1,
-      name,
-      description,
-      price,
-    };
-    this.products.push(newProduct);
+  async createProduct(dto: createProductDto) {
+    const newProduct = this.productRepository.create(dto);
+    return await this.productRepository.save(newProduct);
   }
   /**
    *
    * @returns
    * get all products
    */
-  getAllproducts(): ProductType[] {
-    return this.products;
+  async getAllproducts() {
+    return this.productRepository.find();
   }
-  updateProduct(id: string, body: updateProductDto) {
-    const result = this.products.map((product) =>
-      product.id === parseInt(id) ? { ...product, ...body } : product,
-    );
-    this.products = result;
-    if (!result) {
+  async updateProduct(id: string, body: updateProductDto) {
+    const product = await this.productRepository.findOneBy({
+      id: parseInt(id),
+    });
+    if (!product) {
       throw new NotFoundException('Product not found');
     }
+    this.productRepository.merge(product, body);
+    return this.productRepository.save(product);
   }
-  deleteProduct(id: string) {
-    const result = this.products.filter(
-      (product) => product.id !== parseInt(id),
-    );
-    if (!result) {
+  async deleteProduct(id: string) {
+    const product = await this.productRepository.findOneBy({
+      id: parseInt(id),
+    });
+    if (!product) {
       throw new NotFoundException('Product not found');
     }
-    return result;
+    return this.productRepository.remove(product);
   }
 
-  getProductById(id: string): ProductType | undefined {
-    const result: ProductType | undefined = this.products.find(
-      (product) => product.id === parseInt(id),
-    );
-
-    return result;
+  async getProductById(id: number) {
+    const product = await this.productRepository.findOne({
+      where: { id },
+    });
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+    console.log(product);
+    return product;
   }
 }

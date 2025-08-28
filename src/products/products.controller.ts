@@ -20,28 +20,29 @@ export class ProductsController {
     private readonly usersService: UsersService,
   ) {}
   @Post('create')
-  createProduct(
+  async createProduct(
     @Body()
     body: createProductDto,
   ) {
     console.log(body);
-    this.createProduct(body);
+    return await this.products.createProduct(body); // Call service method
   }
 
   @Get()
   getAllproducts() {
-    return [...this.usersService.getAllUsers()];
+    return this.products.getAllproducts();
   }
   @Put(':id')
   updateProduct(@Param('id') id: string, @Body() body: updateProductDto) {
-    this.updateProduct(id, body);
+    return this.products.updateProduct(id, body);
   }
   @Delete(':id')
   deleteProduct(@Param('id') id: string) {
     this.products.deleteProduct(id);
   }
+
   @Get(':id')
-  getProductById(@Param('id', ParseIntPipe) id: string) {
-    this.products.getProductById(id);
+  getProductById(@Param('id', ParseIntPipe) id: number) {
+    return this.products.getProductById(id);
   }
 }
