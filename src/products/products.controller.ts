@@ -30,10 +30,7 @@ export class ProductsController {
 
   @Get()
   getAllproducts() {
-    return [
-      ...this.products.getAllproducts(),
-      ...this.usersService.getAllUsers(),
-    ];
+    return [...this.usersService.getAllUsers()];
   }
   @Put(':id')
   updateProduct(@Param('id') id: string, @Body() body: updateProductDto) {
