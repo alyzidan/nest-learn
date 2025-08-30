@@ -14,6 +14,29 @@ Content-Type: application/json
     "price": 2
 }
 
+### CREATE NEW USER
+POST http://localhost:3000/users/auth/register
+Content-Type: application/json
+
+{
+    "email": "alyzidansdadasdadasd2@apex.com",
+    "password": "admin@2020.com"
+}
+
+### Login USER
+POST http://localhost:3000/users/auth/login
+Content-Type: application/json
+
+{
+    "email": "alyzidan@apex.com",
+    "password": "admin@2020.com"
+}
+
+### get USER
+GET http://localhost:3000/users/9
+
+
+
 ### Update PRODUCT BY ID
 Put http://localhost:3000/products/3
 Content-Type: application/json
