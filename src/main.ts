@@ -5,7 +5,9 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { ValidationPipe } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+
+import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -14,14 +16,17 @@ async function bootstrap() {
     {}, // Pass options as the third argument (empty object in this case)
   );
 
-  // app.getHttpAdapter().register(somePlugin);
-
+  // ✅ Validation
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
     }),
   );
+
+  // ✅ Enable class-transformer serialization globally
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
   await app.listen(3000);
 }
 bootstrap();
