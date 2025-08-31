@@ -9,9 +9,10 @@ POST http://localhost:3000/products/create
 Content-Type: application/json
 
 {
-    "title": "lab lab",
+    "title": "Tux",
     "description": "some description",
-    "price": 2
+    "price": 6900
+
 }
 
 ### CREATE NEW USER
@@ -19,7 +20,7 @@ POST http://localhost:3000/users/auth/register
 Content-Type: application/json
 
 {
-    "email": "alyzidansdadasdadasd2@apex.com",
+    "email": "alyzidan3@apex.com",
     "password": "admin@2020.com"
 }
 
