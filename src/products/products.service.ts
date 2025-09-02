@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { createProductDto } from './dtos/create-products.dto';
 import { updateProductDto } from './dtos/update-products.dto';
 import { Product } from './entities/product.entitiy';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 type ProductType = {
   id: number;
@@ -16,20 +16,7 @@ export class ProductsService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {}
-  private products: ProductType[] = [
-    {
-      id: 1,
-      name: 'Product 1',
-      description: 'Product 1 description',
-      price: 100,
-    },
-    {
-      id: 2,
-      name: 'Product 2',
-      description: 'Product 2 description',
-      price: 200,
-    },
-  ];
+
   /**
    *
    * @param param0 createProduct
@@ -43,8 +30,16 @@ export class ProductsService {
    * @returns
    * get all products
    */
-  async getAllproducts() {
-    return this.productRepository.find();
+  async getAllproducts(title?: string, limit?: number, offset?: number) {
+    console.log(title, limit, offset);
+    const filters = {
+      where: {
+        ...(title ? { title: Like(`%${title}%`) } : {}),
+      },
+      ...(limit ? { take: limit } : {}),
+      ...(offset ? { skip: offset } : {}),
+    };
+    return this.productRepository.find(filters);
   }
   async updateProduct(id: string, body: updateProductDto) {
     const product = await this.productRepository.findOneBy({

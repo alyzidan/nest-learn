@@ -7,18 +7,18 @@ import {
   Post,
   Put,
   ParseIntPipe,
+  Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { createProductDto } from './dtos/create-products.dto';
 import { updateProductDto } from './dtos/update-products.dto';
 import { ProductsService } from './products.service';
 import { UsersService } from 'src/users/users.service';
+import { off } from 'process';
 
 @Controller('products')
 export class ProductsController {
-  constructor(
-    private readonly products: ProductsService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly products: ProductsService) {}
   @Post('create')
   async createProduct(
     @Body()
@@ -29,8 +29,18 @@ export class ProductsController {
   }
 
   @Get()
-  getAllproducts() {
-    return this.products.getAllproducts();
+  getAllproducts(
+    @Query('title') title?: string,
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number,
+  ) {
+    // if (limit && limit < 1) {
+    //   throw new BadRequestException('limit should be above 0');
+    // }
+    // if (offset && offset < 0) {
+    //   throw new BadRequestException('offset should be above or equal 0');
+    // }
+    return this.products.getAllproducts(title, limit, offset);
   }
   @Put(':id')
   updateProduct(@Param('id') id: string, @Body() body: updateProductDto) {
